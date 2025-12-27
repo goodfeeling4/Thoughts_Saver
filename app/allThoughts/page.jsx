@@ -12,26 +12,24 @@ export default function Page() {
     getAllMessages().then(setThoughts);
   }, []);
   return (
-    <div className="static flex justify-center items-center dark:bg-[#111827] bg-blue-300 w-screen mx-auto">
+    <div className="static  flex justify-center items-center dark:bg-[#111827] bg-blue-300 w-screen mx-auto">
       <div className="flex flex-col w-screen min-h-[90vh]">
         {thoughts.length === 0 ? (
-          <div className="text-center text-gray-500 mt-8">No messages found.</div>
+          <div className="text-center text-gray-500 mt-10">No messages found.</div>
         ) : (
           thoughts.map((m) => (
-            <div key={m.id} className="flex relative  justify-between items-start sm:mx-[10vw] mx-[5vw] m-2 p-4 dark:bg-slate-800 bg-blue-500 dark:text-blue-200 rounded-md">
+            <div key={m.id} className="flex relative pt-8 justify-between items-start sm:mx-[10vw] mx-[5vw] m-2 p-4 dark:bg-slate-800 bg-blue-500 dark:text-blue-200 rounded-md">
               <div className="flex-1 pr-4">
                 <h1 className="text-[1.2rem] dark:text-blue-400 text-black font-extrabold">{m.title}</h1>
                 <div className="dark:text-gray-400 text-black">{m.description}</div>
               </div>
-              <div className="flex-col gap-2 absolute top-2 right-1">
-                <div className="flex sm:gap-4 gap-2 items-start flex-shrink-0">
+                <div className="absolute gap-3 top-2 right-1 flex justify-between items-start flex-shrink-0">
                   <Deletebtn id={m.id} />
                   <Link href={`/editThoughts/${m.id}`}>
                     <span className="bg-gradient-to-r from-pink-800 to-blue-800 rounded-sm p-1">
                       EditThoughts
                     </span>
                   </Link>
-                </div>
               </div>
             </div>
           ))
