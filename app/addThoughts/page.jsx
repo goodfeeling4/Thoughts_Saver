@@ -1,6 +1,10 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { addMessage } from "../../lib/indexdb";
+
+
+
 
 export default function Page() {
   const [formData, setFormData] = useState({
@@ -11,42 +15,34 @@ export default function Page() {
   const [message, setMessage] = useState("");
   const [goToAllThoughts, setGoToAllThoughts] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setMessage("");
 
-    try {
-      const response = await fetch("/api/message", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        setMessage("thoughts added successfully!");
-        setFormData({ title: "", description: "" });
-      } else {
-        const errorData = await response.json();
-        setMessage(`Error: ${errorData.error || "Failed to add thoughts"}`);
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      setMessage("Error: Failed to submit form");
-    } finally {
-      setIsSubmitting(false);
-      setGoToAllThoughts(true);
-    }
-  };
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
   };
-  
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    console.log(formData);
+    setMessage("");
+    
+    try {
+      await addMessage(formData);
+
+      setMessage("Thoughts added successfully!");
+      setFormData({ title: "", description: "" });
+      setGoToAllThoughts(true);
+    } catch (error) {
+      console.error(error);
+      setMessage("Error: Failed to save thought");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div>
       <div className="flex flex-col items-center  dark:bg-[#111827] bg-blue-300 h-[90vh]  p-4">
@@ -90,9 +86,9 @@ export default function Page() {
             {isSubmitting ? "Adding...your valuable thoughts" : "Add your thoughts"}
           </button>
         </form>
-        {goToAllThoughts ? 
+        {goToAllThoughts ?
           <Link href="/allThoughts" className=" m-2 p-2 w-2xs  rounded-l-full flex justify-center items-center dark:bg-blue-300 bg-blue-500 text-blue-700 border-b-2 border-white ">
-            go to all thoughts 
+            go to all thoughts
           </Link> : null}
       </div>
     </div>
