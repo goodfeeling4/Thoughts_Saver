@@ -14,8 +14,8 @@ export default function Deletebtn({id}){
     }
     
     return (
-        <div onClick={remove} className="bg-gradient-to-r text-red-600  rounded-sm p-1 cursor-pointer">
+        <span onClick={remove} className="float-right bg-gradient-to-r border-2 border-red-600  text-red-600  rounded-sm px-1 cursor-pointer">
             Delete
-        </div>
+        </span>
     );
 }
